@@ -1,0 +1,38 @@
+{
+  "name": "kevin-langzeitstudie",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://johannesmols.github.io/kevin-langzeitstudie/",
+  "dependencies": {
+    "@material-ui/core": "^3.4.0",
+    "@material-ui/icons": "^3.0.1",
+    "gh-pages": "^2.0.1",
+    "googleapis": "^27.0.0",
+    "react": "^16.6.1",
+    "react-bootstrap": "^0.32.4",
+    "react-dom": "^16.6.1",
+    "react-google-charts": "^3.0.10",
+    "react-scripts": "2.1.1",
+    "react-spinners": "^0.4.7"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "sass-loader": "^7.1.0"
+  }
+}
