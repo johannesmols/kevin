@@ -18,7 +18,7 @@ class App extends Component {
           <p>
             Made with
             <img src={react_logo} className="App-logo-small" alt="React Logo" /> by{' '}
-            <a target="_blank" rel="noopener noreferrer" href="https://github.com/johannesmols/kevin-langzeitstudie">Johannes Mols</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://github.com/johannesmols/kevin">Johannes Mols</a>
           </p>
         </footer>
       </div>
