@@ -81,6 +81,47 @@ export function prepareTiltLevel(data) {
     return preparedData;
 }
 
+export function prepareHackCallDatenColumn(data) {
+    let preparedData = [['Kategorie', 'Hack Call', 'Prime']];
+
+    let kevin = [], team = [], team_ohne_kevin = [], uebereinstimmung = []; 
+    data.forEach(entry => {
+        if (entry.kevin_anwesend === 'Y') {
+            kevin.push([entry.kevin_hack_call === 'Y' ? true : false, entry.prime === 'Y' ? true : false]);
+        }
+        if (entry.team_hack_call && entry.kevin_anwesend === 'Y') {
+            team.push([entry.team_hack_call === 'Y' ? true : false, entry.prime === 'Y' ? true : false]);
+        }
+        if (entry.kevin_anwesend === 'N' && entry.team_hack_call) {
+            team_ohne_kevin.push([entry.team_hack_call === 'Y' ? true : false, entry.prime === 'Y' ? true : false]);
+        }
+        if (entry.kevin_anwesend === 'Y') {
+            if ((entry.kevin_hack_call === 'Y' && entry.team_hack_call === 'N') ||
+                (entry.kevin_hack_call === 'N' && entry.team_hack_call === 'N')) 
+            {
+                uebereinstimmung.push(true);
+            } else {
+                uebereinstimmung.push(false);
+            }
+        }
+    });
+
+    let kevin_hack_call = percentageTrue(kevin.map(function(value, index) { return value[0] })); // Wie oft Kevin Hack called
+    let kevin_prime = percentageTrue(kevin.filter(e => e[0] === true).map(function(value, index) { return value[1] })); // Wie viele Matches davon Prime waren
+    let team_hack_call = percentageTrue(team.map(function(value, index) { return value[0] })); // Wie oft das Team Hack called
+    let team_prime = percentageTrue(team.filter(e => e[0] === true).map(function(value, index) { return value[1] })); // Wie viele Matches davon Prime waren
+    let team_o_k_hack_call = percentageTrue(team_ohne_kevin.map(function(value, index) { return value[0] })); // Wie oft das Team ohne Kevin Hack called
+    let team_o_k_prime = percentageTrue(team_ohne_kevin.filter(e => e[0] === true).map(function(value, index) { return value[1] })); // Wie viele Matches davon Prime waren
+    let uebereinstimmung_p = percentageTrue(uebereinstimmung);
+    
+    preparedData.push(['Kevin', kevin_hack_call, kevin_prime]);
+    preparedData.push(['Team mit Kevin', team_hack_call, team_prime]);
+    preparedData.push(['Team ohne Kevin', team_o_k_hack_call, team_o_k_prime]);
+    preparedData.push(['Zustimmung mit Kevin' , uebereinstimmung_p, 0]);
+
+    return preparedData;
+}
+
 export function prepareHackCallDaten(data) {
     let preparedData = [['From', 'To', 'Weight']];
 
@@ -125,4 +166,8 @@ function countOccurrences(data, value) {
         }
     });
     return counter;
+}
+
+function percentageTrue(data) {
+    return data.filter(e => e === true).length / data.length * 100;
 }

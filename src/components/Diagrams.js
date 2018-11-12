@@ -3,7 +3,7 @@ import './Diagrams.css'
 import config from '../config';
 import { PacmanLoader } from 'react-spinners';
 import { load } from '../helpers/spreadsheet';
-import { prepareMapVerteilung, prepareNationalitaetenVerteilung, prepareTiltLevel, prepareHackCallDaten } from '../helpers/prepareData';
+import { prepareMapVerteilung, prepareNationalitaetenVerteilung, prepareTiltLevel, prepareHackCallDaten, prepareHackCallDatenColumn } from '../helpers/prepareData';
 import { Chart } from 'react-google-charts';
 import { Panel } from 'react-bootstrap';
 
@@ -21,6 +21,16 @@ const tilt_options = {
   vAxis: {
     title: 'Tilt Level (1-5)',
     minValue: 1
+  }
+}
+
+const hack_call_options = {
+  title: 'Kevins Hack Quall Quote im Vergleich zum Team',
+  focusTarget: 'category',
+  vAxis: {
+    title: 'Prozent (0-100)',
+    minValue: 0,
+    maxValue: 100
   }
 }
 
@@ -125,6 +135,15 @@ class Diagrams extends Component {
           </Panel.Heading>
           <Panel.Collapse>
             <Panel.Body>
+            <Chart
+                chartType="ColumnChart"
+                data={prepareHackCallDatenColumn(this.state.entries)}
+                graph_id="HackCallColumn"
+                width="100%"
+                height="100%"
+                legend_toggle={true}
+                options={hack_call_options}
+              />
               <Chart
                 chartType="Sankey"
                 data={prepareHackCallDaten(this.state.entries)}
