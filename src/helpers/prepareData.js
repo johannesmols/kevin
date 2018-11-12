@@ -158,6 +158,20 @@ export function prepareHackCallDaten(data) {
     return preparedData;
 }
 
+export function prepareToxicRatingScatterchart(data) {
+    let preparedData = [['Toxizität', 'HLTV Rating 1.0']];
+
+    data.forEach(entry => {
+        if (entry.kevin_anwesend === 'Y' && entry.kevin_hltv_rating && entry.kevin_toxicity) {
+            preparedData.push([Number(entry.kevin_toxicity), Number(entry.kevin_hltv_rating)]);
+        }
+    });
+
+    console.log(preparedData);
+
+    return preparedData;
+}
+
 function countOccurrences(data, value) {
     let counter = 0;
     data.forEach(map => {

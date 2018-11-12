@@ -3,7 +3,7 @@ import './Diagrams.css'
 import config from '../config';
 import { PacmanLoader } from 'react-spinners';
 import { load } from '../helpers/spreadsheet';
-import { prepareMapVerteilung, prepareNationalitaetenVerteilung, prepareTiltLevel, prepareHackCallDaten, prepareHackCallDatenColumn } from '../helpers/prepareData';
+import { prepareMapVerteilung, prepareNationalitaetenVerteilung, prepareTiltLevel, prepareHackCallDaten, prepareHackCallDatenColumn, prepareToxicRatingScatterchart } from '../helpers/prepareData';
 import { Chart } from 'react-google-charts';
 import { Panel } from 'react-bootstrap';
 
@@ -31,6 +31,25 @@ const hack_call_options = {
     title: 'Prozent (0-100)',
     minValue: 0,
     maxValue: 100
+  }
+}
+
+const trendline_options = {
+  hAxis: { 
+    title: 'Toxizität',
+    minValue: 1,
+    maxValue: 5,
+    viewWindowMode: 'maximized'
+  },
+  vAxis: { 
+    title: 'HLTV Rating 1.0'
+  },
+  legend: 'none',
+  trendlines: { 0: {
+      type: 'exponential',
+      lineWidth: 10,
+      opacity: 0.2
+    } 
   }
 }
 
@@ -152,6 +171,27 @@ class Diagrams extends Component {
                 height="100%"
                 loader = {<div>Loading Chart</div>}
                 legend_toggle={true}
+              />
+            </Panel.Body>
+          </Panel.Collapse>
+        </Panel>
+
+        <Panel className='panel-bootstrap' id="panel-kevin-toxic-hltv-rating-correlation" defaultExpanded>
+          <Panel.Heading>
+            <Panel.Title toggle>
+              Kevins Toxizität im Kontext seiner Leistung
+            </Panel.Title>
+          </Panel.Heading>
+          <Panel.Collapse>
+            <Panel.Body>
+              <Chart
+                chartType="ScatterChart"
+                data={prepareToxicRatingScatterchart(this.state.entries)}
+                graph_id="KevinToxicRatingScatterChart"
+                width="100%"
+                height="100%"
+                legend_toggle={true}
+                options={trendline_options}
               />
             </Panel.Body>
           </Panel.Collapse>

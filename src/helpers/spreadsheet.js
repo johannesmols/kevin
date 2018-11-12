@@ -6,7 +6,7 @@ export function load(callback) {
         window.gapi.client.sheets.spreadsheets.values
             .get({
                 spreadsheetId: config.spreadsheetId,
-                range: "Daten!A6:Q",
+                range: "Daten!A6:R",
                 valueRenderOption: "FORMATTED_VALUE"
             })
             .then(
@@ -24,13 +24,14 @@ export function load(callback) {
                             kevin_toxicity: entry[7],
                             kevin_hack_call: entry[8],
                             kevin_stats: entry[9],
-                            ergebnis: entry[10],
-                            team_hack_call: entry[11],
-                            joe_tilt: entry[12],
-                            jakob_tilt: entry[13],
-                            mika_tilt: entry[14],
-                            match_link: entry[15],
-                            anmerkung: entry[16]
+                            kevin_hltv_rating: entry[10],
+                            ergebnis: entry[11],
+                            team_hack_call: entry[12],
+                            joe_tilt: entry[13],
+                            jakob_tilt: entry[14],
+                            mika_tilt: entry[15],
+                            match_link: entry[16],
+                            anmerkung: entry[17]
                         })) || [];
 
                     callback({
