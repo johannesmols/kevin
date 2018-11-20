@@ -92,19 +92,19 @@ export function prepareMapAnalyse(data) {
                 prime_nonprime[0] / (prime_nonprime[0] + prime_nonprime[1]) * 100, // Prime
                 kevin_hack_call[0] / (kevin_hack_call[0] + kevin_hack_call[1]) * 100, // Kevin Hack Call
                 team_hack_call[0] / (team_hack_call[0] + team_hack_call[1]) * 100, // Team Hack Call
-                ((kevin_toxicity[0] * 20) 
-                + (kevin_toxicity[1] * 40) 
-                + (kevin_toxicity[2] * 60) 
-                + (kevin_toxicity[3] * 80) 
-                + (kevin_toxicity[4] * 100) 
-                + (kevin_toxicity[5] * 120)) / 
+                ((kevin_toxicity[0] * 0) 
+                + (kevin_toxicity[1] * 20) 
+                + (kevin_toxicity[2] * 40) 
+                + (kevin_toxicity[3] * 60) 
+                + (kevin_toxicity[4] * 80) 
+                + (kevin_toxicity[5] * 100)) / 
                 (kevin_toxicity.reduce((a, b) => a + b, 0)), // Kevin Toxizität
-                ((avg_tilt[0] * 20) 
-                + (avg_tilt[1] * 40) 
-                + (avg_tilt[2] * 60) 
-                + (avg_tilt[3] * 80) 
-                + (avg_tilt[4] * 100) 
-                + (avg_tilt[5] * 120)) / 
+                ((avg_tilt[0] * 0) 
+                + (avg_tilt[1] * 20) 
+                + (avg_tilt[2] * 40) 
+                + (avg_tilt[3] * 60) 
+                + (avg_tilt[4] * 80) 
+                + (avg_tilt[5] * 100)) / 
                 (avg_tilt.reduce((a, b) => a + b, 0)), // Team Tilt
             ]);
         }
