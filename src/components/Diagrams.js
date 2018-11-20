@@ -3,9 +3,21 @@ import './Diagrams.css'
 import config from '../config';
 import { PacmanLoader } from 'react-spinners';
 import { load } from '../helpers/spreadsheet';
-import { prepareMapVerteilung, prepareNationalitaetenVerteilung, prepareTiltLevel, prepareHackCallDaten, prepareHackCallDatenColumn, prepareToxicRatingScatterchart } from '../helpers/prepareData';
+import { prepareMapVerteilung, prepareNationalitaetenVerteilung, prepareTiltLevel, prepareHackCallDaten, prepareHackCallDatenColumn, prepareToxicRatingScatterchart, prepareMapAnalyse } from '../helpers/prepareData';
 import { Chart } from 'react-google-charts';
 import { Panel } from 'react-bootstrap';
+
+const map_analyse_options = {
+  title: 'Map Analyse',
+  vAxis: { 
+    title: 'Prozent (0-100)',
+    minValue: 0,
+    maxValue: 100
+   },
+  hAxis: { title: 'Map' },
+  seriesType: 'bars',
+  isStacked: false,
+}
 
 const geochart_options = {
   region: '150',
@@ -119,7 +131,30 @@ class Diagrams extends Component {
                 graph_id="MapVerteilung"
                 width="100%"
                 height="400px"
+                loader={<div>Loading Chart</div>}
                 legend_toggle={true}
+              />
+            </Panel.Body>
+          </Panel.Collapse>
+        </Panel>
+
+        <Panel className='panel-bootstrap' id="panel-map-analyse" defaultExpanded>
+          <Panel.Heading>
+            <Panel.Title toggle>
+              Map Analyse
+            </Panel.Title>
+          </Panel.Heading>
+          <Panel.Collapse>
+            <Panel.Body>
+              <Chart
+                chartType="ComboChart"
+                data={prepareMapAnalyse(this.state.entries)}
+                graph_id="MapAnalyse"
+                width="100%"
+                height="100%"
+                loader={<div>Loading Chart</div>}
+                legend_toggle={true}
+                options={map_analyse_options}
               />
             </Panel.Body>
           </Panel.Collapse>
@@ -139,6 +174,7 @@ class Diagrams extends Component {
                 graph_id="TiltLevel"
                 width="100%"
                 height="100%"
+                loader={<div>Loading Chart</div>}
                 legend_toggle={true}
                 options={tilt_options}
               />
@@ -160,6 +196,7 @@ class Diagrams extends Component {
                 graph_id="HackCallColumn"
                 width="100%"
                 height="100%"
+                loader={<div>Loading Chart</div>}
                 legend_toggle={true}
                 options={hack_call_options}
               />
@@ -169,7 +206,7 @@ class Diagrams extends Component {
                 graph_id="HackCall"
                 width="100%"
                 height="100%"
-                loader = {<div>Loading Chart</div>}
+                loader={<div>Loading Chart</div>}
                 legend_toggle={true}
               />
             </Panel.Body>
@@ -190,6 +227,7 @@ class Diagrams extends Component {
                 graph_id="KevinToxicRatingScatterChart"
                 width="100%"
                 height="100%"
+                loader={<div>Loading Chart</div>}
                 legend_toggle={true}
                 options={trendline_options}
               />
@@ -211,6 +249,7 @@ class Diagrams extends Component {
                 graph_id="GegnerNationalitaeten"
                 width="100%"
                 height="500px"
+                loader={<div>Loading Chart</div>}
                 legend_toggle={true}
                 options={geochart_options}
               />
@@ -232,6 +271,7 @@ class Diagrams extends Component {
                 graph_id="TeamNationalitaeten"
                 width="100%"
                 height="500px"
+                loader={<div>Loading Chart</div>}
                 legend_toggle={true}
                 options={geochart_options}
               />

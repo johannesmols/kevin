@@ -20,6 +20,99 @@ export function prepareMapVerteilung(data) {
     return returnArray;
 }
 
+export function prepareMapAnalyse(data) {
+    let preparedData = [['Map', 'Win Rate', 'Prime', 'Kevin Hack Call', 'Team Hack Call', 'Avg. Kevin Toxizität', 'Avg. Tilt']];
+    let processedMaps = [];
+
+    data.forEach(entry => {
+        if (!processedMaps.includes(entry.map)) {
+            let currentMap = entry.map;
+
+            let win_lose = [0,0];
+            let prime_nonprime = [0,0];
+            let kevin_hack_call = [0,0];
+            let team_hack_call = [0,0];
+            let kevin_toxicity = [0,0,0,0,0,0]; // [0] = 1er Tilt, [4] = 5er Tilt, [5] = 6er Tilt (Ausnahme)
+            let avg_tilt = [0,0,0,0,0,0]; // [0] = 1er Tilt, [4] = 5er Tilt, [5] = 6er Tilt (Ausnahme)
+
+            data.forEach(entry2 => {
+                if (currentMap === entry2.map) {
+                    // Ergebnis
+                    let result = entry2.ergebnis;
+                    let scores = result.split(':');
+                    if (Number(scores[0] > Number(scores[1]))) {
+                        win_lose[0]++;
+                    } else if (Number(scores[0] < Number(scores[1]))) {
+                        win_lose[1]++;
+                    } // Ignore ties
+
+                    // Prime
+                    if (entry2.prime === 'Y') {
+                        prime_nonprime[0]++;
+                    } else {
+                        prime_nonprime[1]++;
+                    }
+
+                    // Kevin Hack Call
+                    if (entry2.kevin_hack_call === 'Y') {
+                        kevin_hack_call[0]++;
+                    } else {
+                        kevin_hack_call[1]++;
+                    }
+
+                    // Team Hack Call
+                    if (entry2.team_hack_call === 'Y') {
+                        team_hack_call[0]++;
+                    } else {
+                        team_hack_call[1]++;
+                    }
+
+                    // Kevin Toxizität
+                    if (entry2.kevin_anwesend === 'Y') {
+                        kevin_toxicity[Number(entry2.kevin_toxicity) - 1]++;
+                    }
+
+                    // Average Tilt
+                    if (entry2.joe_tilt) {
+                        avg_tilt[Number(entry2.joe_tilt) - 1]++;
+                    }
+                    if (entry2.jakob_tilt) {
+                        avg_tilt[Number(entry2.jakob_tilt) - 1]++;
+                    }
+                    if (entry2.mika_tilt) {
+                        avg_tilt[Number(entry2.mika_tilt) - 1]++;
+                    }
+                }
+            });
+
+            processedMaps.push(entry.map);
+            preparedData.push([
+                entry.map, // Map
+                win_lose[0] / (win_lose[0] + win_lose[1]) * 100, // Win Rate
+                prime_nonprime[0] / (prime_nonprime[0] + prime_nonprime[1]) * 100, // Prime
+                kevin_hack_call[0] / (kevin_hack_call[0] + kevin_hack_call[1]) * 100, // Kevin Hack Call
+                team_hack_call[0] / (team_hack_call[0] + team_hack_call[1]) * 100, // Team Hack Call
+                ((kevin_toxicity[0] * 20) 
+                + (kevin_toxicity[1] * 40) 
+                + (kevin_toxicity[2] * 60) 
+                + (kevin_toxicity[3] * 80) 
+                + (kevin_toxicity[4] * 100) 
+                + (kevin_toxicity[5] * 120)) / 
+                (kevin_toxicity.reduce((a, b) => a + b, 0)), // Kevin Toxizität
+                ((avg_tilt[0] * 20) 
+                + (avg_tilt[1] * 40) 
+                + (avg_tilt[2] * 60) 
+                + (avg_tilt[3] * 80) 
+                + (avg_tilt[4] * 100) 
+                + (avg_tilt[5] * 120)) / 
+                (avg_tilt.reduce((a, b) => a + b, 0)), // Team Tilt
+            ]);
+        }
+    });
+
+    return preparedData;
+}
+
 export function prepareNationalitaetenVerteilung(data, teamOrEnemies) {
     // Nationalitäten in Array machen
     let nationalities = [];
@@ -166,8 +259,6 @@ export function prepareToxicRatingScatterchart(data) {
             preparedData.push([Number(entry.kevin_toxicity), Number(entry.kevin_hltv_rating)]);
         }
     });
-
-    console.log(preparedData);
 
     return preparedData;
 }
