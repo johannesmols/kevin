@@ -1,3 +1,5 @@
+import { getCountryName } from "./isoConverter";
+
 const arrayAverage = array => array.reduce((a,b) => a + b, 0) / array.length;
 
 export function prepareMapVerteilung(data) {
@@ -263,11 +265,12 @@ export function prepareNationalitaetenVerteilung(data, teamOrEnemies) {
     });
 
     // Prozentzahlen berechnen
-    let returnArray = [["Nationalität", "Verteilung in Prozent"]];
+    let returnArray = [["Nationalität", "Verteilung in Prozent", {type: 'string', role: 'tooltip'}]];
     let alreadyCalculatedCountries = [];
     nationalities.forEach(nation => {
         if (!alreadyCalculatedCountries.includes(nation)) {
-            returnArray.push([nation, (countOccurrences(nationalities, nation) / nationalities.length) * 100]);
+            let percentage = countOccurrences(nationalities, nation) / nationalities.length * 100;
+            returnArray.push([getCountryName(nation), percentage, percentage.toFixed(2) + '%']);
             alreadyCalculatedCountries.push(nation);
         }
     });

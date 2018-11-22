@@ -130,11 +130,17 @@ const map_analyse_team_tilt = {
 }
 
 const geochart_options = {
+  keepAspecRatio: true,
   region: '150',
   resolution: 'countries',
-  displayMode: 'auto',
+  displayMode: 'regions',
+  domain: 'DE',
+  enableRegionInteractivity: true,
   magnifyingGlass: {enable: true, zoomFactor: 7.5},
-  colorAxis: {minValue: 0,  colors: ['green', 'orange', 'red']}
+  colorAxis: {minValue: 0,  colors: ['green', 'orange', 'red']},
+  legend: {
+    numberFormat: '.##'
+  }
 }
 
 const tilt_options = {
@@ -409,7 +415,7 @@ class Diagrams extends Component {
                 data={prepareNationalitaetenVerteilung(this.state.entries, false)}
                 graph_id="GegnerNationalitaeten"
                 width="100%"
-                height="500px"
+                height="100%"
                 loader={<div>Loading Chart</div>}
                 legend_toggle={true}
                 options={geochart_options}
@@ -431,7 +437,7 @@ class Diagrams extends Component {
                 data={prepareNationalitaetenVerteilung(this.state.entries, true)}
                 graph_id="TeamNationalitaeten"
                 width="100%"
-                height="500px"
+                height="100%"
                 loader={<div>Loading Chart</div>}
                 legend_toggle={true}
                 options={geochart_options}
