@@ -186,13 +186,26 @@ class Diagrams extends Component {
     loading: true,
     error: null,
     entries: [],
-    results: 0
+    results: 0,
+    width: window.innerWidth
   };
+
+  componentWillMount() {
+    window.addEventListener('resize', this.handleWindowSizeChange);
+  }
 
   componentDidMount() {
     // 1. Load the JavaScript client library
     window.gapi.load('client', this.start);
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleWindowSizeChange);
+  }
+
+  handleWindowSizeChange = () => {
+    this.setState({ width: window.innerWidth });
+  };
 
   start = () => {
     // 2. Initialize the JavaScript client library
@@ -220,6 +233,9 @@ class Diagrams extends Component {
   };
 
   render() {
+    const { width } = this.state;
+    const isMobile = width <= 500;
+
     // Show Loading
     if (this.state.loading) {
       return (
@@ -410,16 +426,29 @@ class Diagrams extends Component {
           </Panel.Heading>
           <Panel.Collapse>
             <Panel.Body>
-              <Chart
-                chartType="GeoChart"
-                data={prepareNationalitaetenVerteilung(this.state.entries, false)}
-                graph_id="GegnerNationalitaeten"
-                width="100%"
-                height="100%"
-                loader={<div>Loading Chart</div>}
-                legend_toggle={true}
-                options={geochart_options}
-              />
+              {isMobile ? (
+                <Chart
+                  chartType="GeoChart"
+                  data={prepareNationalitaetenVerteilung(this.state.entries, false)}
+                  graph_id="GegnerNationalitaeten"
+                  width="100%"
+                  height="100%"
+                  loader={<div>Loading Chart</div>}
+                  legend_toggle={true}
+                  options={geochart_options}
+                />
+              ) : (
+                <Chart
+                  chartType="GeoChart"
+                  data={prepareNationalitaetenVerteilung(this.state.entries, false)}
+                  graph_id="GegnerNationalitaeten"
+                  width="100%"
+                  height="500px"
+                  loader={<div>Loading Chart</div>}
+                  legend_toggle={true}
+                  options={geochart_options}
+                />
+              )}
             </Panel.Body>
           </Panel.Collapse>
         </Panel>
@@ -432,17 +461,29 @@ class Diagrams extends Component {
           </Panel.Heading>
           <Panel.Collapse>
             <Panel.Body>
-              <Chart
-                chartType="GeoChart"
-                data={prepareNationalitaetenVerteilung(this.state.entries, true)}
-                graph_id="TeamNationalitaeten"
-                width="100%"
-                height="100%"
-                loader={<div>Loading Chart</div>}
-                legend_toggle={true}
-                options={geochart_options}
-                mapsApiKey={config.apiKey}
-              />
+            {isMobile ? (
+                <Chart
+                  chartType="GeoChart"
+                  data={prepareNationalitaetenVerteilung(this.state.entries, true)}
+                  graph_id="TeamNationalitaeten"
+                  width="100%"
+                  height="100%"
+                  loader={<div>Loading Chart</div>}
+                  legend_toggle={true}
+                  options={geochart_options}
+                />
+              ) : (
+                <Chart
+                  chartType="GeoChart"
+                  data={prepareNationalitaetenVerteilung(this.state.entries, true)}
+                  graph_id="TeamNationalitaeten"
+                  width="100%"
+                  height="500px"
+                  loader={<div>Loading Chart</div>}
+                  legend_toggle={true}
+                  options={geochart_options}
+                />
+              )}
             </Panel.Body>
           </Panel.Collapse>
         </Panel>
