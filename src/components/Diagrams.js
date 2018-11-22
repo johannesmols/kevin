@@ -3,20 +3,114 @@ import './Diagrams.css'
 import config from '../config';
 import { PacmanLoader } from 'react-spinners';
 import { load } from '../helpers/spreadsheet';
-import { prepareMapVerteilung, prepareNationalitaetenVerteilung, prepareTiltLevel, prepareHackCallDaten, prepareHackCallDatenColumn, prepareToxicRatingScatterchart, prepareMapAnalyse } from '../helpers/prepareData';
+import { prepareMapVerteilung, prepareNationalitaetenVerteilung, prepareTiltLevel, prepareHackCallDaten, prepareHackCallDatenColumn, prepareToxicRatingScatterchart, prepareMapAnalyseWinRate, prepareMapAnalysePrime, prepareMapAnalyseKevinHackCall, prepareMapAnalyseTeamHackCall, prepareMapAnalyseKevinToxicity, prepareMapAnalyseTeamTilt } from '../helpers/prepareData';
 import { Chart } from 'react-google-charts';
 import { Panel } from 'react-bootstrap';
 
-const map_analyse_options = {
-  title: 'Map Analyse',
-  vAxis: { 
+const map_analyse_win_rate = {
+  title: 'Win Rate',
+  isStacked: true,
+  focusTarget: 'category',
+  hAxis: {
+    title: ''
+  },
+  vAxis: {
     title: 'Prozent (0-100)',
     minValue: 0,
     maxValue: 100
-   },
-  hAxis: { title: 'Map' },
-  seriesType: 'bars',
+  },
+  series: {
+    0:{color:'#3e8410'},
+    1:{color:'#c44129'}
+  }
+}
+
+const map_analyse_prime = {
+  title: 'Matches mit Prime aktiviert',
+  isStacked: true,
+  focusTarget: 'category',
+  hAxis: {
+    title: ''
+  },
+  vAxis: {
+    title: 'Prozent (0-100)',
+    minValue: 0,
+    maxValue: 100
+  },
+  series: {
+    0:{color:'#3e8410'},
+    1:{color:'#c44129'}
+  }
+}
+
+const map_analyse_kevin_hack_call = {
+  title: 'Matches in denen Kevin Hack called',
+  isStacked: true,
+  focusTarget: 'category',
+  hAxis: {
+    title: ''
+  },
+  vAxis: {
+    title: 'Prozent (0-100)',
+    minValue: 0,
+    maxValue: 100
+  },
+  series: {
+    0:{color:'#3e8410'},
+    1:{color:'#c44129'}
+  }
+}
+
+const map_analyse_team_hack_call = {
+  title: 'Matches in denen das Team Hack called',
+  isStacked: true,
+  focusTarget: 'category',
+  hAxis: {
+    title: ''
+  },
+  vAxis: {
+    title: 'Prozent (0-100)',
+    minValue: 0,
+    maxValue: 100
+  },
+  series: {
+    0:{color:'#3e8410'},
+    1:{color:'#c44129'}
+  }
+}
+
+const map_analyse_kevin_toxicity = {
+  title: 'Durschnittliche Toxizität von Kevin',
   isStacked: false,
+  focusTarget: 'category',
+  hAxis: {
+    title: ''
+  },
+  vAxis: {
+    title: 'Toxizität (1-5)',
+    minValue: 1,
+    maxValue: 5
+  },
+  series: {
+    0:{color:'#ec9332'}
+  }
+}
+
+const map_analyse_team_tilt = {
+  title: 'Durschnittlicher Tilt des gesamten Teams ausgenommen von Kevin',
+  isStacked: false,
+  focusTarget: 'category',
+  hAxis: {
+    title: ''
+  },
+  vAxis: {
+    title: 'Tilt (1-5)',
+    minValue: 1,
+    maxValue: 5
+  },
+  series: {
+    0:{color:'#0560bd'}
+  }
 }
 
 const geochart_options = {
@@ -147,14 +241,64 @@ class Diagrams extends Component {
           <Panel.Collapse>
             <Panel.Body>
               <Chart
-                chartType="ComboChart"
-                data={prepareMapAnalyse(this.state.entries)}
-                graph_id="MapAnalyse"
+                chartType="ColumnChart"
+                data={prepareMapAnalyseWinRate(this.state.entries)}
+                graph_id="MapAnalyseWinRate"
                 width="100%"
                 height="100%"
                 loader={<div>Loading Chart</div>}
                 legend_toggle={true}
-                options={map_analyse_options}
+                options={map_analyse_win_rate}
+              />
+              <Chart
+                chartType="ColumnChart"
+                data={prepareMapAnalysePrime(this.state.entries)}
+                graph_id="MapAnalysePrime"
+                width="100%"
+                height="100%"
+                loader={<div>Loading Chart</div>}
+                legend_toggle={true}
+                options={map_analyse_prime}
+              />
+              <Chart
+                chartType="ColumnChart"
+                data={prepareMapAnalyseKevinHackCall(this.state.entries)}
+                graph_id="MapAnalyseKevinHackCall"
+                width="100%"
+                height="100%"
+                loader={<div>Loading Chart</div>}
+                legend_toggle={true}
+                options={map_analyse_kevin_hack_call}
+              />
+              <Chart
+                chartType="ColumnChart"
+                data={prepareMapAnalyseTeamHackCall(this.state.entries)}
+                graph_id="MapAnalyseTeamHackCall"
+                width="100%"
+                height="100%"
+                loader={<div>Loading Chart</div>}
+                legend_toggle={true}
+                options={map_analyse_team_hack_call}
+              />
+              <Chart
+                chartType="ColumnChart"
+                data={prepareMapAnalyseKevinToxicity(this.state.entries)}
+                graph_id="MapAnalyseKevinToxicity"
+                width="100%"
+                height="100%"
+                loader={<div>Loading Chart</div>}
+                legend_toggle={true}
+                options={map_analyse_kevin_toxicity}
+              />
+              <Chart
+                chartType="ColumnChart"
+                data={prepareMapAnalyseTeamTilt(this.state.entries)}
+                graph_id="MapAnalyseTeamTilt"
+                width="100%"
+                height="100%"
+                loader={<div>Loading Chart</div>}
+                legend_toggle={true}
+                options={map_analyse_team_tilt}
               />
             </Panel.Body>
           </Panel.Collapse>

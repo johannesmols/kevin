@@ -20,23 +20,19 @@ export function prepareMapVerteilung(data) {
     return returnArray;
 }
 
-export function prepareMapAnalyse(data) {
-    let preparedData = [['Map', 'Win Rate', 'Prime', 'Kevin Hack Call', 'Team Hack Call', 'Avg. Kevin Toxizität', 'Avg. Tilt']];
-    let processedMaps = [];
+export function prepareMapAnalyseWinRate(data) {
+    let preparedData = [['Map', 'Gewonnen', {type: 'string', role: 'tooltip'}, 'Verloren', {type: 'string', role: 'tooltip'}]];
 
+    data.sort((a, b) => a.map.localeCompare(b.map)); // Sort maps alpabetically
+
+    let processedMaps = [];
     data.forEach(entry => {
         if (!processedMaps.includes(entry.map)) {
             let currentMap = entry.map;
-
             let win_lose = [0,0];
-            let prime_nonprime = [0,0];
-            let kevin_hack_call = [0,0];
-            let team_hack_call = [0,0];
-            let kevin_toxicity = [0,0,0,0,0,0]; // [0] = 1er Tilt, [4] = 5er Tilt, [5] = 6er Tilt (Ausnahme)
-            let avg_tilt = [0,0,0,0,0,0]; // [0] = 1er Tilt, [4] = 5er Tilt, [5] = 6er Tilt (Ausnahme)
 
             data.forEach(entry2 => {
-                if (currentMap === entry2.map) {
+                if (currentMap === entry2.map && entry2.ergebnis) {
                     // Ergebnis
                     let result = entry2.ergebnis;
                     let scores = result.split(':');
@@ -45,67 +41,208 @@ export function prepareMapAnalyse(data) {
                     } else if (Number(scores[0] < Number(scores[1]))) {
                         win_lose[1]++;
                     } // Ignore ties
+                }
+            });
 
+            let wins = win_lose[0] / (win_lose[0] + win_lose[1]) * 100;
+            let loses = win_lose[1] / (win_lose[0] + win_lose[1]) * 100;
+
+            processedMaps.push(entry.map);
+            preparedData.push([
+                entry.map,
+                wins,
+                wins.toFixed(2) + '% (' + win_lose[0] + ')',
+                loses,
+                loses.toFixed(2) + '% (' + win_lose[1] + ')'
+            ]);
+        }
+    });
+
+    return preparedData;
+}
+
+export function prepareMapAnalysePrime(data) {
+    let preparedData = [['Map', 'Prime', {type: 'string', role: 'tooltip'}, 'Non-Prime', {type: 'string', role: 'tooltip'}]];
+
+    data.sort((a, b) => a.map.localeCompare(b.map)); // Sort maps alpabetically
+
+    let processedMaps = [];
+    data.forEach(entry => {
+        if (!processedMaps.includes(entry.map)) {
+            let currentMap = entry.map;
+            let prime_nonprime = [0,0];
+
+            data.forEach(entry2 => {
+                if (currentMap === entry2.map) {
                     // Prime
                     if (entry2.prime === 'Y') {
                         prime_nonprime[0]++;
                     } else {
                         prime_nonprime[1]++;
                     }
+                }
+            });
 
+            let prime = prime_nonprime[0] / (prime_nonprime[0] + prime_nonprime[1]) * 100;
+            let non_prime = prime_nonprime[1] / (prime_nonprime[0] + prime_nonprime[1]) * 100;
+
+            processedMaps.push(entry.map);
+            preparedData.push([
+                entry.map,
+                prime,
+                prime.toFixed(2) + '% (' + prime_nonprime[0] + ')',
+                non_prime,
+                non_prime.toFixed(2) + '% (' + prime_nonprime[1] + ')'
+            ]);
+        }
+    });
+
+    return preparedData;
+}
+
+export function prepareMapAnalyseKevinHackCall(data) {
+    let preparedData = [['Map', 'Ja', {type: 'string', role: 'tooltip'}, 'Nein', {type: 'string', role: 'tooltip'}]];
+
+    data.sort((a, b) => a.map.localeCompare(b.map)); // Sort maps alpabetically
+
+    let processedMaps = [];
+    data.forEach(entry => {
+        if (!processedMaps.includes(entry.map)) {
+            let currentMap = entry.map;
+            let kevin_hack_call = [0,0];
+
+            data.forEach(entry2 => {
+                if (currentMap === entry2.map && entry2.kevin_anwesend === 'Y') {
                     // Kevin Hack Call
                     if (entry2.kevin_hack_call === 'Y') {
                         kevin_hack_call[0]++;
                     } else {
                         kevin_hack_call[1]++;
                     }
+                }
+            });
 
-                    // Team Hack Call
-                    if (entry2.team_hack_call === 'Y') {
+            let hack_call = kevin_hack_call[0] / (kevin_hack_call[0] + kevin_hack_call[1]) * 100;
+            let non_hack_call = kevin_hack_call[1] / (kevin_hack_call[0] + kevin_hack_call[1]) * 100;
+
+            processedMaps.push(entry.map);
+            preparedData.push([
+                entry.map,
+                hack_call,
+                hack_call.toFixed(2) + '% (' + kevin_hack_call[0] + ')',
+                non_hack_call,
+                non_hack_call.toFixed(2) + '% (' + kevin_hack_call[1] + ')'
+            ]);
+        }
+    });
+
+    return preparedData;
+}
+
+export function prepareMapAnalyseTeamHackCall(data) {
+    let preparedData = [['Map', 'Ja', {type: 'string', role: 'tooltip'}, 'Nein', {type: 'string', role: 'tooltip'}]];
+
+    data.sort((a, b) => a.map.localeCompare(b.map)); // Sort maps alpabetically
+
+    let processedMaps = [];
+    data.forEach(entry => {
+        if (!processedMaps.includes(entry.map)) {
+            let currentMap = entry.map;
+            let team_hack_call = [0,0];
+
+            data.forEach(entry2 => {
+                if (currentMap === entry2.map) {
+                    // Kevin Hack Call
+                    if (entry2.kevin_hack_call === 'Y') {
                         team_hack_call[0]++;
                     } else {
                         team_hack_call[1]++;
                     }
+                }
+            });
 
-                    // Kevin Toxizität
-                    if (entry2.kevin_anwesend === 'Y') {
-                        kevin_toxicity[Number(entry2.kevin_toxicity) - 1]++;
-                    }
+            let hack_call = team_hack_call[0] / (team_hack_call[0] + team_hack_call[1]) * 100;
+            let non_hack_call = team_hack_call[1] / (team_hack_call[0] + team_hack_call[1]) * 100;
 
-                    // Average Tilt
+            processedMaps.push(entry.map);
+            preparedData.push([
+                entry.map,
+                hack_call,
+                hack_call.toFixed(2) + '% (' + team_hack_call[0] + ')',
+                non_hack_call,
+                non_hack_call.toFixed(2) + '% (' + team_hack_call[1] + ')'
+            ]);
+        }
+    });
+
+    return preparedData;
+}
+
+export function prepareMapAnalyseKevinToxicity(data) {
+    let preparedData = [['Map', 'Toxizität', {type: 'string', role: 'tooltip'}]];
+
+    data.sort((a, b) => a.map.localeCompare(b.map)); // Sort maps alpabetically
+
+    let processedMaps = [];
+    data.forEach(entry => {
+        if (!processedMaps.includes(entry.map)) {
+            let currentMap = entry.map;
+            let kevin_toxicity = 0;
+            let count = 0;
+
+            data.forEach(entry2 => {
+                if (currentMap === entry2.map && entry2.kevin_anwesend === 'Y') {
+                    kevin_toxicity += Number(entry2.kevin_toxicity);
+                    count++;
+                }
+            });
+
+            processedMaps.push(entry.map);
+            preparedData.push([
+                entry.map,
+                kevin_toxicity / count,
+                (kevin_toxicity / count).toFixed(2) + ' (ø aus ' + count + ' Spiel(en))'
+            ]);
+        }
+    });
+
+    return preparedData;
+}
+
+export function prepareMapAnalyseTeamTilt(data) {
+    let preparedData = [['Map', 'Tilt', {type: 'string', role: 'tooltip'}]];
+
+    data.sort((a, b) => a.map.localeCompare(b.map)); // Sort maps alpabetically
+
+    let processedMaps = [];
+    data.forEach(entry => {
+        if (!processedMaps.includes(entry.map)) {
+            let currentMap = entry.map;
+            let tilt = 0;
+            let count = 0;
+
+            data.forEach(entry2 => {
+                if (currentMap === entry2.map) {
                     if (entry2.joe_tilt) {
-                        avg_tilt[Number(entry2.joe_tilt) - 1]++;
+                        tilt += Number(entry2.joe_tilt);
+                        count++;
                     }
                     if (entry2.jakob_tilt) {
-                        avg_tilt[Number(entry2.jakob_tilt) - 1]++;
+                        tilt += Number(entry2.jakob_tilt);
+                        count++;
                     }
                     if (entry2.mika_tilt) {
-                        avg_tilt[Number(entry2.mika_tilt) - 1]++;
+                        tilt += Number(entry2.mika_tilt);
+                        count++;
                     }
                 }
             });
 
             processedMaps.push(entry.map);
             preparedData.push([
-                entry.map, // Map
-                win_lose[0] / (win_lose[0] + win_lose[1]) * 100, // Win Rate
-                prime_nonprime[0] / (prime_nonprime[0] + prime_nonprime[1]) * 100, // Prime
-                kevin_hack_call[0] / (kevin_hack_call[0] + kevin_hack_call[1]) * 100, // Kevin Hack Call
-                team_hack_call[0] / (team_hack_call[0] + team_hack_call[1]) * 100, // Team Hack Call
-                ((kevin_toxicity[0] * 0) 
-                + (kevin_toxicity[1] * 20) 
-                + (kevin_toxicity[2] * 40) 
-                + (kevin_toxicity[3] * 60) 
-                + (kevin_toxicity[4] * 80) 
-                + (kevin_toxicity[5] * 100)) / 
-                (kevin_toxicity.reduce((a, b) => a + b, 0)), // Kevin Toxizität
-                ((avg_tilt[0] * 0) 
-                + (avg_tilt[1] * 20) 
-                + (avg_tilt[2] * 40) 
-                + (avg_tilt[3] * 60) 
-                + (avg_tilt[4] * 80) 
-                + (avg_tilt[5] * 100)) / 
-                (avg_tilt.reduce((a, b) => a + b, 0)), // Team Tilt
+                entry.map,
+                tilt / count,
+                (tilt / count).toFixed(2) + ' (ø aus ' + count + ' Werten)'
             ]);
         }
     });
