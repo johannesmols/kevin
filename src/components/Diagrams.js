@@ -7,6 +7,22 @@ import { prepareMapVerteilung, prepareNationalitaetenVerteilung, prepareTiltLeve
 import { Chart } from 'react-google-charts';
 import { Panel } from 'react-bootstrap';
 
+const pie_chart_options = {
+  is3D: true,
+  chartArea: {
+    left: 20,
+    top: 20,
+    right: 20,
+    bottom: 20,
+    width: '100%',
+    height: '100%'
+  },
+  legend: {
+    position: 'labeled',
+    alignment: 'center'
+  }
+}
+
 const map_analyse_win_rate = {
   title: 'Win Rate',
   isStacked: true,
@@ -224,9 +240,10 @@ class Diagrams extends Component {
                 data={prepareMapVerteilung(this.state.entries)}
                 graph_id="MapVerteilung"
                 width="100%"
-                height="400px"
+                height="300px"
                 loader={<div>Loading Chart</div>}
                 legend_toggle={true}
+                options={pie_chart_options}
               />
             </Panel.Body>
           </Panel.Collapse>
@@ -418,6 +435,7 @@ class Diagrams extends Component {
                 loader={<div>Loading Chart</div>}
                 legend_toggle={true}
                 options={geochart_options}
+                mapsApiKey={config.apiKey}
               />
             </Panel.Body>
           </Panel.Collapse>
