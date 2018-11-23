@@ -436,6 +436,7 @@ class Diagrams extends Component {
                   loader={<div>Loading Chart</div>}
                   legend_toggle={true}
                   options={geochart_options}
+                  mapsApiKey={config.apiKey}
                 />
               ) : (
                 <Chart
@@ -447,6 +448,7 @@ class Diagrams extends Component {
                   loader={<div>Loading Chart</div>}
                   legend_toggle={true}
                   options={geochart_options}
+                  mapsApiKey={config.apiKey}
                 />
               )}
             </Panel.Body>
@@ -471,6 +473,7 @@ class Diagrams extends Component {
                   loader={<div>Loading Chart</div>}
                   legend_toggle={true}
                   options={geochart_options}
+                  mapsApiKey={config.apiKey}
                 />
               ) : (
                 <Chart
@@ -482,6 +485,7 @@ class Diagrams extends Component {
                   loader={<div>Loading Chart</div>}
                   legend_toggle={true}
                   options={geochart_options}
+                  mapsApiKey={config.apiKey}
                 />
               )}
             </Panel.Body>
