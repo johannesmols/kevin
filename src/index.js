@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
+import ReactGA from 'react-ga';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -10,3 +11,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+// Google Analytics
+ReactGA.initialize('UA-129691270-1');
+ReactGA.pageview(window.location.pathname + window.location.search);

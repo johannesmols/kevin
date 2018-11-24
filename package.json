@@ -11,6 +11,7 @@
     "react": "^16.6.1",
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.6.1",
+    "react-ga": "^2.5.3",
     "react-google-charts": "^3.0.10",
     "react-scripts": "2.1.1",
     "react-spinners": "^0.4.7"
