@@ -154,8 +154,8 @@ export function prepareMapAnalyseTeamHackCall(data) {
 
             data.forEach(entry2 => {
                 if (currentMap === entry2.map) {
-                    // Kevin Hack Call
-                    if (entry2.kevin_hack_call === 'Y') {
+                    // Team Hack Call
+                    if (entry2.team_hack_call === 'Y') {
                         team_hack_call[0]++;
                     } else {
                         team_hack_call[1]++;

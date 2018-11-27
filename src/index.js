@@ -15,3 +15,5 @@ serviceWorker.unregister();
 // Google Analytics
 ReactGA.initialize('UA-129691270-1');
 ReactGA.pageview(window.location.pathname + window.location.search);
+
+console.log('Wer das liest ist doof.');
